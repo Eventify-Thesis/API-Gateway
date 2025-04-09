@@ -7,6 +7,9 @@ import { EventServiceProxy } from './event/services/event.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClerkClientProvider } from './providers/clerk-client.provider';
 import { AuthModule } from './auth/auth.module';
+import { SeatGatewayModule } from './seat/seat.gateway.module';
+import { SeatController } from './seat/seat.controller';
+import { SSEEventsController } from './seat/sse.events.controller';
 
 @Module({
   imports: [
@@ -24,8 +27,18 @@ import { AuthModule } from './auth/auth.module';
       },
     ]),
     AuthModule,
+    SeatGatewayModule,
   ],
-  controllers: [AppController, PlannerEventsController],
-  providers: [AppService, EventServiceProxy, ClerkClientProvider],
+  controllers: [
+    AppController,
+    PlannerEventsController,
+    SeatController,
+    SSEEventsController,
+  ],
+  providers: [
+    AppService,
+    EventServiceProxy,
+    ClerkClientProvider,
+  ],
 })
 export class AppModule {}

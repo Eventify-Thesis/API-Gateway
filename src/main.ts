@@ -17,17 +17,17 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
-
-  const cors = require('cors');
-  const corsOptions = {
-    origin: 'http://localhost:5174',
-    credentials: true,
-    optionSuccessStatus: 200,
-  };
-  app.use(cors(corsOptions));
+  app.enableCors();
 
   const configService = app.get(ConfigService);
 
   await app.listen(3000);
+
+  const microservice = app.connectMicroservice({
+    transport: Transport.REDIS,
+    options: { port: 6379 },
+  });
+
+  await app.startAllMicroservices();
 }
 bootstrap();
