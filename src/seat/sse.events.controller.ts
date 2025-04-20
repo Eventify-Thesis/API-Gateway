@@ -4,12 +4,12 @@ import { SeatService } from './seat.service';
 
 @Controller()
 export class SSEEventsController {
-  constructor(private readonly seatService: SeatService) {}
+  constructor(private readonly seatService: SeatService) { }
 
   @MessagePattern('seatUpdated')
   handleSeatUpdate(
-    @Payload() payload: { showId: string; seatId: string; status: string },
+    @Payload() data: { showId: number; payload: string },
   ) {
-    this.seatService.broadcast(payload.showId, payload);
+    this.seatService.broadcast(data.showId, data.payload);
   }
 }

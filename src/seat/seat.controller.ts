@@ -14,19 +14,18 @@ import { map } from 'rxjs/operators';
 
 @Controller('seats')
 export class SeatController {
-  constructor(private readonly seatService: SeatService) {}
+  constructor(private readonly seatService: SeatService) { }
 
   @Get(':showId/availability/stream')
   @Sse()
   subscribe(
-    @Param('showId') showId: string,
+    @Param('showId') showId: number,
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ): Observable<MessageEvent> {
-    const subject = this.seatService.getSubject(showId);
 
-    // Optional: Immediately fetch once
     this.seatService.fetchAndBroadcastAvailability(showId);
+    const subject = this.seatService.getSubject(showId);
 
     // 👇 Cleanup on client disconnect
     req.on('close', () => {
