@@ -3,13 +3,16 @@ import { AppController } from './app.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AppService } from './app.service';
 import { PlannerEventsController } from './event/controller/planner-event.controller';
-import { EventServiceProxy } from './event/services/event.service';
+import { PlannerEventServiceProxy } from './event/services/planner-event.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClerkClientProvider } from './providers/clerk-client.provider';
 import { AuthModule } from './auth/auth.module';
 import { SeatGatewayModule } from './seat/seat.gateway.module';
 import { SeatController } from './seat/seat.controller';
 import { SSEEventsController } from './seat/sse.events.controller';
+import { EventServiceProxy } from './event/services/event.service';
+import { EventController } from './event/controller/event.controller';
+import { BookingsModule } from './bookings/bookings.module';
 
 @Module({
   imports: [
@@ -28,17 +31,20 @@ import { SSEEventsController } from './seat/sse.events.controller';
     ]),
     AuthModule,
     SeatGatewayModule,
+    BookingsModule,
   ],
   controllers: [
     AppController,
     PlannerEventsController,
     SeatController,
     SSEEventsController,
+    EventController,
   ],
   providers: [
     AppService,
     EventServiceProxy,
+    PlannerEventServiceProxy,
     ClerkClientProvider,
   ],
 })
-export class AppModule {}
+export class AppModule { }

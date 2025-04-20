@@ -6,14 +6,14 @@ import { TicketServiceProxy } from 'src/ticket/ticket.service';
 export class SeatService implements OnModuleInit, OnModuleDestroy {
   constructor(private readonly ticketService: TicketServiceProxy) {}
 
-  private availabilitySubjects: Map<string, Subject<any>> = new Map();
-  private knownShowIds: Set<string> = new Set();
-  private subscriberCount: Map<string, number> = new Map();
-  private cleanupTimeouts: Map<string, NodeJS.Timeout> = new Map();
+  private availabilitySubjects: Map<number, Subject<any>> = new Map();
+  private knownShowIds: Set<number> = new Set();
+  private subscriberCount: Map<number, number> = new Map();
+  private cleanupTimeouts: Map<number, NodeJS.Timeout> = new Map();
 
   private pollingInterval: NodeJS.Timeout;
 
-  getSubject(showId: string): Subject<any> {
+  getSubject(showId: number): Subject<any> {
     if (!this.availabilitySubjects.has(showId)) {
       this.availabilitySubjects.set(showId, new Subject<any>());
       this.subscriberCount.set(showId, 0);
@@ -36,7 +36,7 @@ export class SeatService implements OnModuleInit, OnModuleDestroy {
     return this.availabilitySubjects.get(showId)!;
   }
 
-  removeSubscriber(showId: string) {
+  removeSubscriber(showId: number) {
     const current = (this.subscriberCount.get(showId) ?? 1) - 1;
     this.subscriberCount.set(showId, current);
 
@@ -54,14 +54,14 @@ export class SeatService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
-  broadcast(showId: string, data: any) {
+  broadcast(showId: number, data: any) {
     const subject = this.availabilitySubjects.get(showId);
     if (subject) {
       subject.next(data);
     }
   }
 
-  async fetchAndBroadcastAvailability(showId: string) {
+  async fetchAndBroadcastAvailability(showId: number) {
     const availability = await this.ticketService.getShowSeatAvailability(
       showId,
     );
