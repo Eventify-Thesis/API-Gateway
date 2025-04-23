@@ -3,6 +3,7 @@ import { BookingsService } from './bookings.service';
 import { BookingsController } from './bookings.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { TicketServiceProxy } from 'src/ticket/ticket.service';
+import { PaymentController } from './payment.controller';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { TicketServiceProxy } from 'src/ticket/ticket.service';
       },
     ]),
   ],
-  controllers: [BookingsController],
+  controllers: [BookingsController, PaymentController],
   providers: [BookingsService, TicketServiceProxy],
 })
 export class BookingsModule { }

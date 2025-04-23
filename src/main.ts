@@ -6,9 +6,17 @@ import { ConfigService } from '@nestjs/config';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 import { Transport, MicroserviceOptions } from '@nestjs/microservices';
 import { AppExceptionFilter } from './common/exceptions/app-exception.filter';
+import { rawBodyMiddleware } from './middleware/raw-body.middleware';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    rawBody: true,
+    bodyParser: true,
+  });
+
+  // Apply raw body middleware before other middleware
+  app.use(rawBodyMiddleware());
+
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,

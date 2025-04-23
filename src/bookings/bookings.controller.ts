@@ -5,11 +5,15 @@ import RequestWithUser from 'src/auth/role/requestWithUser.interface';
 import { ClerkAuthGuard } from 'src/auth/clerk-auth.guard';
 import { ApiQuery } from '@nestjs/swagger';
 import { QuestionAnswerDto } from './dto/question-answer.dto';
+import { Stripe } from 'stripe';
+import { RawBodyRequest } from '@nestjs/common/interfaces';
 
 @Controller('bookings')
 @UseGuards(ClerkAuthGuard)
 export class BookingsController {
-  constructor(private readonly bookingsService: BookingsService) { }
+
+  constructor(private readonly bookingsService: BookingsService) {
+  }
 
   @Post('submit-ticket-info')
   @UsePipes(new ValidationPipe({ transform: true }))
@@ -69,4 +73,9 @@ export class BookingsController {
     return this.bookingsService.getFormAnswers(showId, bookingCode);
   }
 
+  @Post('create-payment-intent')
+  createPaymentIntent(@Body() body: any) {
+    console.log('create payment intent', body);
+    return this.bookingsService.createPaymentIntent(body);
+  }
 }
