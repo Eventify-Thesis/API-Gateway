@@ -4,9 +4,8 @@ import { IsString, IsNumber, IsEmail, IsObject, ValidateNested, IsArray, IsOptio
 
 export class QuestionResponse {
     @ApiProperty({ description: 'Answer to the question', required: false })
-    @IsString()
     @IsOptional()
-    answer?: string;
+    answer?: any;
 }
 
 export class Question {

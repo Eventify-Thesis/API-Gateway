@@ -11,6 +11,7 @@ export class BookingsService {
   constructor(private readonly ticketService: TicketServiceProxy) { }
 
   async submitTicketInfo(dto: SubmitTicketInfoDto) {
+    console.log('dto', dto);
     return await this.ticketService.submitTicketInfo(dto);
   }
 
@@ -52,5 +53,13 @@ export class BookingsService {
       paymentIntentId: paymentIntent.id,
       errorMessage: paymentIntent.last_payment_error?.message,
     });
+  }
+
+  async getAvailableVouchers(eventId: number, showId: number) {
+    return await this.ticketService.getAvailableVouchers(eventId, showId);
+  }
+
+  async applyVoucher(showId: number, bookingCode: string, voucherCode: string) {
+    return await this.ticketService.applyVoucher(showId, bookingCode, voucherCode);
   }
 }

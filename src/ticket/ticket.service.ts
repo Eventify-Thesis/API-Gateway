@@ -109,4 +109,16 @@ export class TicketServiceProxy {
       this.client.send('handleFailedPayment', payload).toPromise()
     );
   }
+
+  async getAvailableVouchers(eventId: number, showId: number) {
+    return await this.tryClient(() =>
+      this.client.send('get_available_vouchers', { eventId, showId }).toPromise()
+    );
+  }
+
+  async applyVoucher(showId: number, bookingCode: string, voucherCode: string) {
+    return await this.tryClient(() =>
+      this.client.send('apply_voucher', { showId, bookingCode, voucherCode }).toPromise()
+    );
+  }
 }

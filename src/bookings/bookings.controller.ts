@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Query, Req, UsePipes, ValidationPipe, UseGuards, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Query, Req, UsePipes, ValidationPipe, UseGuards, Delete, Put, Param } from '@nestjs/common';
 import { BookingsService } from './bookings.service';
 import { SubmitTicketInfoDto } from './dto/submit-ticket-info.dto';
 import RequestWithUser from 'src/auth/role/requestWithUser.interface';
@@ -22,7 +22,7 @@ export class BookingsController {
     @Body() submitTicketInfoDto: SubmitTicketInfoDto) {
     const answer = await this.bookingsService.submitTicketInfo({
       ...submitTicketInfoDto,
-      userId: req.user.id
+      userId: req.user.id,
     }
     );
     return answer;
@@ -71,6 +71,20 @@ export class BookingsController {
     @Query('bookingCode') bookingCode: string,
   ) {
     return this.bookingsService.getFormAnswers(showId, bookingCode);
+  }
+
+  @Get('vouchers/:eventId/:showId')
+  async getAvailableVouchers(@Param('eventId') eventId: number, @Param('showId') showId: number) {
+    return this.bookingsService.getAvailableVouchers(eventId, showId);
+  }
+
+  @Post('vouchers/:showId/:bookingCode/apply')
+  async applyVoucher(
+    @Param('showId') showId: number,
+    @Param('bookingCode') bookingCode: string,
+    @Body() { voucherCode }: { voucherCode: string },
+  ) {
+    return this.bookingsService.applyVoucher(showId, bookingCode, voucherCode);
   }
 
   @Post('create-payment-intent')
