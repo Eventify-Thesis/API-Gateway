@@ -13,6 +13,8 @@ import { SSEEventsController } from './seat/sse.events.controller';
 import { EventServiceProxy } from './event/services/event.service';
 import { EventController } from './event/controller/event.controller';
 import { BookingsModule } from './bookings/bookings.module';
+import { SearchModule } from './search/search.module';
+import { SearchController } from './search/search.controller';
 
 @Module({
   imports: [
@@ -32,6 +34,7 @@ import { BookingsModule } from './bookings/bookings.module';
     AuthModule,
     SeatGatewayModule,
     BookingsModule,
+    SearchModule,
   ],
   controllers: [
     AppController,
@@ -39,6 +42,7 @@ import { BookingsModule } from './bookings/bookings.module';
     SeatController,
     SSEEventsController,
     EventController,
+    SearchController,
   ],
   providers: [
     AppService,
