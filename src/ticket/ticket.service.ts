@@ -5,6 +5,7 @@ import {
   ClientProxyFactory,
   Transport,
 } from '@nestjs/microservices';
+import { CreatePaymentIntentDto } from 'src/bookings/dto/create-payment-intent.dto';
 import { QuestionAnswerDto } from 'src/bookings/dto/question-answer.dto';
 
 @Injectable()
@@ -78,6 +79,46 @@ export class TicketServiceProxy {
   async updateAnswers(questionAnswers: QuestionAnswerDto) {
     return await this.tryClient(() =>
       this.client.send('updateAnswers', questionAnswers).toPromise()
+    );
+  }
+
+  async createPaymentIntent(data: CreatePaymentIntentDto) {
+    return await this.tryClient(() =>
+      this.client.send('createPaymentIntent', data.orderId).toPromise()
+    );
+  }
+
+  async handleSuccessfulPayment(payload: {
+    orderId: number;
+    paymentIntentId: string;
+    amount: number;
+    status: string;
+    paidAt: Date;
+  }) {
+    return await this.tryClient(() =>
+      this.client.send('handleSuccessfulPayment', payload).toPromise()
+    );
+  }
+
+  async handleFailedPayment(payload: {
+    orderId: number;
+    paymentIntentId: string;
+    errorMessage?: string;
+  }) {
+    return await this.tryClient(() =>
+      this.client.send('handleFailedPayment', payload).toPromise()
+    );
+  }
+
+  async getAvailableVouchers(eventId: number, showId: number) {
+    return await this.tryClient(() =>
+      this.client.send('get_available_vouchers', { eventId, showId }).toPromise()
+    );
+  }
+
+  async applyVoucher(showId: number, bookingCode: string, voucherCode: string) {
+    return await this.tryClient(() =>
+      this.client.send('apply_voucher', { showId, bookingCode, voucherCode }).toPromise()
     );
   }
 }

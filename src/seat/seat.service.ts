@@ -4,7 +4,7 @@ import { TicketServiceProxy } from 'src/ticket/ticket.service';
 
 @Injectable()
 export class SeatService implements OnModuleInit, OnModuleDestroy {
-  constructor(private readonly ticketService: TicketServiceProxy) {}
+  constructor(private readonly ticketService: TicketServiceProxy) { }
 
   private availabilitySubjects: Map<number, Subject<any>> = new Map();
   private knownShowIds: Set<number> = new Set();
@@ -73,7 +73,7 @@ export class SeatService implements OnModuleInit, OnModuleDestroy {
       for (const id of this.knownShowIds) {
         await this.fetchAndBroadcastAvailability(id);
       }
-    }, 20000); // Poll every 20 seconds
+    }, 5000); // Poll every 20 seconds
   }
 
   onModuleDestroy() {
