@@ -13,6 +13,7 @@ import { SSEEventsController } from './seat/sse.events.controller';
 import { EventServiceProxy } from './event/services/event.service';
 import { EventController } from './event/controller/event.controller';
 import { BookingsModule } from './bookings/bookings.module';
+import { OrderController } from './event/controller/order.controller';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { BookingsModule } from './bookings/bookings.module';
     SeatController,
     SSEEventsController,
     EventController,
+    OrderController
   ],
   providers: [
     AppService,

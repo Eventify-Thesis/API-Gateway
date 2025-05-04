@@ -1,5 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
+import RequestWithUser from 'src/auth/role/requestWithUser.interface';
+import { GetOrdersQuery } from '../dto/get-orders.dto';
+import { User } from '@clerk/backend';
 
 @Injectable()
 export class EventServiceProxy {
@@ -28,6 +31,22 @@ export class EventServiceProxy {
   async getEventQuestions(id: number) {
     try {
       return await this.client.send('getEventQuestions', id).toPromise();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async getUserOrders(userId: string, query: GetOrdersQuery) {
+    try {
+      return await this.client.send('getUserOrders', { userId, query }).toPromise();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async getOrderDetail(orderPublicId: string) {
+    try {
+      return await this.client.send('getOrderDetail', orderPublicId).toPromise();
     } catch (error) {
       console.log(error);
     }
