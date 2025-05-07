@@ -50,5 +50,29 @@ export class SearchService {
     );
     return response.data;
   }
-}
 
+  async getEventsThisMonth(): Promise<any> {
+    const response: AxiosResponse = await this.httpService.axiosRef.get(
+      `${this.baseUrl}/events/this-month`
+    );
+    return response.data;
+  }
+
+  async getEventsThisWeek(): Promise<any> {
+    const response: AxiosResponse = await this.httpService.axiosRef.get(
+      `${this.baseUrl}/events/this-week`
+    );
+    return response.data;
+  }
+
+  async getEventsByCategory(): Promise<any> {
+    try {
+      const response: AxiosResponse = await this.httpService.axiosRef.get(
+        `${this.baseUrl}/events-by-category`
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error(`Failed to fetch events by category: ${error.message}`);
+    }
+  }
+}
