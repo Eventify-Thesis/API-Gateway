@@ -49,4 +49,5 @@ export class EventController {
     if (!question) throw new AppException(MESSAGE.QUESTION_NOT_FOUND);
     return question;
   }
+
 }

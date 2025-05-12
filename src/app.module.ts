@@ -13,6 +13,7 @@ import { SSEEventsController } from './seat/sse.events.controller';
 import { EventServiceProxy } from './event/services/event.service';
 import { EventController } from './event/controller/event.controller';
 import { BookingsModule } from './bookings/bookings.module';
+import { OrderController } from './event/controller/order.controller';
 import { SearchModule } from './search/search.module';
 import { SearchController } from './search/search.controller';
 
@@ -42,6 +43,7 @@ import { SearchController } from './search/search.controller';
     SeatController,
     SSEEventsController,
     EventController,
+    OrderController
     SearchController,
   ],
   providers: [
