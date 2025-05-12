@@ -43,7 +43,7 @@ import { SearchController } from './search/search.controller';
     SeatController,
     SSEEventsController,
     EventController,
-    OrderController
+    OrderController,
     SearchController,
   ],
   providers: [
