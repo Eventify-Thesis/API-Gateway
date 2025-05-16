@@ -10,6 +10,7 @@ export class SearchController {
     @Query('q') query?: string,
     @Query('user_id') userId?: string,
     @Query('limit') limit: number = 15,
+    @Query('page') page: number = 1,
     @Query('city') city?: string,
     @Query('categories') categories?: string,
     @Query('startDate') startDate?: string,
@@ -18,7 +19,7 @@ export class SearchController {
     // If query is undefined, pass empty string to service for match-all behavior
     const searchQuery = query ?? '';
     return this.searchService.searchSemanticEvents(
-      searchQuery, userId, Number(limit), city, categories, startDate, endDate
+      searchQuery, userId, Number(limit), Number(page), city, categories, startDate, endDate
     );
   }
 

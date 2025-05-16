@@ -18,12 +18,13 @@ export class SearchService {
     query: string,
     userId?: string,
     limit: number = 15,
+    page: number = 1,
     city?: string,
     categories?: string | string[],
     startDate?: string,
     endDate?: string
   ): Promise<any> {
-    const params: Record<string, any> = { q: query, limit };
+    const params: Record<string, any> = { q: query, limit, page };
     if (userId) params.user_id = userId;
     if (city) params.city = city;
     if (categories) params.categories = categories;
