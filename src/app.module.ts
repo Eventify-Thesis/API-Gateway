@@ -16,6 +16,7 @@ import { BookingsModule } from './bookings/bookings.module';
 import { OrderController } from './event/controller/order.controller';
 import { SearchModule } from './search/search.module';
 import { SearchController } from './search/search.controller';
+import { InterestModule } from './interest/interest.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { SearchController } from './search/search.controller';
     SeatGatewayModule,
     BookingsModule,
     SearchModule,
+    InterestModule,
   ],
   controllers: [
     AppController,

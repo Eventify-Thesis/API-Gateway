@@ -1,5 +1,6 @@
 import { Controller, Get, Query, Param } from '@nestjs/common';
 import { SearchService } from './search.service';
+import { ApiQuery } from '@nestjs/swagger';
 
 @Controller('/search')
 export class SearchController {
@@ -8,7 +9,7 @@ export class SearchController {
   @Get()
   async searchSemanticEvents(
     @Query('q') query?: string,
-    @Query('user_id') userId?: string,
+    @Query('userId') userId?: string,
     @Query('limit') limit: number = 15,
     @Query('page') page: number = 1,
     @Query('city') city?: string,
@@ -30,24 +31,32 @@ export class SearchController {
 
   @Get('events/:eventId/related')
   async getRelatedEvents(
-    @Param('eventId') eventId: string,
+    @Param('eventId') eventId: number,
     @Query('limit') limit: number = 4,
+    @Query('userId') userId?: string,
   ) {
-    return this.searchService.getRelatedEvents(eventId, Number(limit));
+    return this.searchService.getRelatedEvents(eventId, Number(limit), userId);
   }
 
   @Get('events/this-month')
-  async getEventsThisMonth() {
-    return this.searchService.getEventsThisMonth();
+  @ApiQuery({ name: 'userId', required: false })
+  async getEventsThisMonth(
+    @Query('userId') userId?: string,
+  ) {
+    return this.searchService.getEventsThisMonth(userId);
   }
 
   @Get('events/this-week')
-  async getEventsThisWeek() {
-    return this.searchService.getEventsThisWeek();
+  async getEventsThisWeek(
+    @Query('userId') userId?: string,
+  ) {
+    return this.searchService.getEventsThisWeek(userId);
   }
 
   @Get('events-by-category')
-  async getEventsByCategory() {
-    return this.searchService.getEventsByCategory();
+  async getEventsByCategory(
+    @Query('userId') userId?: string,
+  ) {
+    return this.searchService.getEventsByCategory(userId);
   }
 }

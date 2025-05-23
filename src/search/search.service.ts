@@ -25,11 +25,11 @@ export class SearchService {
     endDate?: string
   ): Promise<any> {
     const params: Record<string, any> = { q: query, limit, page };
-    if (userId) params.user_id = userId;
+    if (userId) params.userId = userId;
     if (city) params.city = city;
     if (categories) params.categories = categories;
-    if (startDate) params.start_date = startDate;
-    if (endDate) params.end_date = endDate;
+    if (startDate) params.startDate = startDate;
+    if (endDate) params.endDate = endDate;
     const response: AxiosResponse = await this.httpService.axiosRef.get(
       `${this.baseUrl}`,
       { params }
@@ -44,32 +44,47 @@ export class SearchService {
     return response.data;
   }
 
-  async getRelatedEvents(eventId: string, limit: number = 4): Promise<any> {
+  async getRelatedEvents(
+    eventId: number,
+    limit: number = 4,
+    userId?: string
+  ): Promise<any> {
+    const params: Record<string, any> = { limit };
+    if (userId) params.userId = userId;
     const response: AxiosResponse = await this.httpService.axiosRef.get(
       `${this.baseUrl}/events/${eventId}/related`,
-      { params: { limit } }
+      { params }
     );
     return response.data;
   }
 
-  async getEventsThisMonth(): Promise<any> {
+  async getEventsThisMonth(userId?: string): Promise<any> {
+    const params: Record<string, any> = {};
+    if (userId) params.userId = userId;
     const response: AxiosResponse = await this.httpService.axiosRef.get(
-      `${this.baseUrl}/events/this-month`
+      `${this.baseUrl}/events/this-month`,
+      { params }
     );
     return response.data;
   }
 
-  async getEventsThisWeek(): Promise<any> {
+  async getEventsThisWeek(userId?: string): Promise<any> {
+    const params: Record<string, any> = {};
+    if (userId) params.userId = userId;
     const response: AxiosResponse = await this.httpService.axiosRef.get(
-      `${this.baseUrl}/events/this-week`
+      `${this.baseUrl}/events/this-week`,
+      { params }
     );
     return response.data;
   }
 
-  async getEventsByCategory(): Promise<any> {
+  async getEventsByCategory(userId?: string): Promise<any> {
+    const params: Record<string, any> = {};
+    if (userId) params.userId = userId;
     try {
       const response: AxiosResponse = await this.httpService.axiosRef.get(
-        `${this.baseUrl}/events-by-category`
+        `${this.baseUrl}/events-by-category`,
+        { params }
       );
       return response.data;
     } catch (error) {
