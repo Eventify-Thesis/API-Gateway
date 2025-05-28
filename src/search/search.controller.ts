@@ -16,11 +16,26 @@ export class SearchController {
     @Query('categories') categories?: string,
     @Query('startDate') startDate?: string,
     @Query('endDate') endDate?: string,
+    @Query('min_lat') min_lat?: number,
+    @Query('max_lat') max_lat?: number,
+    @Query('min_lon') min_lon?: number,
+    @Query('max_lon') max_lon?: number,
   ) {
     // If query is undefined, pass empty string to service for match-all behavior
     const searchQuery = query ?? '';
     return this.searchService.searchSemanticEvents(
-      searchQuery, userId, Number(limit), Number(page), city, categories, startDate, endDate
+      searchQuery,
+      userId,
+      Number(limit),
+      Number(page),
+      city,
+      categories,
+      startDate,
+      endDate,
+      min_lat,
+      max_lat,
+      min_lon,
+      max_lon,
     );
   }
 
@@ -40,23 +55,17 @@ export class SearchController {
 
   @Get('events/this-month')
   @ApiQuery({ name: 'userId', required: false })
-  async getEventsThisMonth(
-    @Query('userId') userId?: string,
-  ) {
+  async getEventsThisMonth(@Query('userId') userId?: string) {
     return this.searchService.getEventsThisMonth(userId);
   }
 
   @Get('events/this-week')
-  async getEventsThisWeek(
-    @Query('userId') userId?: string,
-  ) {
+  async getEventsThisWeek(@Query('userId') userId?: string) {
     return this.searchService.getEventsThisWeek(userId);
   }
 
   @Get('events-by-category')
-  async getEventsByCategory(
-    @Query('userId') userId?: string,
-  ) {
+  async getEventsByCategory(@Query('userId') userId?: string) {
     return this.searchService.getEventsByCategory(userId);
   }
 }

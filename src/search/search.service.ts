@@ -5,7 +5,7 @@ import { AxiosResponse } from 'axios';
 
 @Injectable()
 export class SearchService {
-  private readonly baseUrl: string;
+  private baseUrl: string;
 
   constructor(
     private readonly httpService: HttpService,
@@ -20,26 +20,54 @@ export class SearchService {
     limit: number = 15,
     page: number = 1,
     city?: string,
-    categories?: string | string[],
+    categories?: string,
     startDate?: string,
-    endDate?: string
+    endDate?: string,
+    min_lat?: number,
+    max_lat?: number,
+    min_lon?: number,
+    max_lon?: number,
   ): Promise<any> {
-    const params: Record<string, any> = { q: query, limit, page };
-    if (userId) params.userId = userId;
-    if (city) params.city = city;
-    if (categories) params.categories = categories;
-    if (startDate) params.startDate = startDate;
-    if (endDate) params.endDate = endDate;
-    const response: AxiosResponse = await this.httpService.axiosRef.get(
-      `${this.baseUrl}`,
-      { params }
-    );
-    return response.data;
+    try {
+      // Prepare search parameters
+      const params: Record<string, any> = {
+        q: query,
+        limit,
+        page,
+        ...(userId ? { userId } : {}),
+        ...(city ? { city } : {}),
+        ...(categories ? { categories } : {}),
+        ...(startDate ? { startDate } : {}),
+        ...(endDate ? { endDate } : {}),
+        ...(min_lat !== undefined ? { min_lat } : {}),
+        ...(max_lat !== undefined ? { max_lat } : {}),
+        ...(min_lon !== undefined ? { min_lon } : {}),
+        ...(max_lon !== undefined ? { max_lon } : {}),
+      };
+
+      // Use the existing httpService
+      const response: AxiosResponse = await this.httpService.axiosRef.get(
+        `${this.baseUrl}`,
+        { params },
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error('Error searching semantic events:', error);
+      return {
+        success: false,
+        data: {
+          result: [],
+          total: 0,
+        },
+        error: error.message,
+      };
+    }
   }
 
   async getSearchMetadata(): Promise<any> {
     const response: AxiosResponse = await this.httpService.axiosRef.get(
-      `${this.baseUrl}/metadata`
+      `${this.baseUrl}/metadata`,
     );
     return response.data;
   }
@@ -47,13 +75,13 @@ export class SearchService {
   async getRelatedEvents(
     eventId: number,
     limit: number = 4,
-    userId?: string
+    userId?: string,
   ): Promise<any> {
     const params: Record<string, any> = { limit };
     if (userId) params.userId = userId;
     const response: AxiosResponse = await this.httpService.axiosRef.get(
       `${this.baseUrl}/events/${eventId}/related`,
-      { params }
+      { params },
     );
     return response.data;
   }
@@ -63,7 +91,7 @@ export class SearchService {
     if (userId) params.userId = userId;
     const response: AxiosResponse = await this.httpService.axiosRef.get(
       `${this.baseUrl}/events/this-month`,
-      { params }
+      { params },
     );
     return response.data;
   }
@@ -73,7 +101,7 @@ export class SearchService {
     if (userId) params.userId = userId;
     const response: AxiosResponse = await this.httpService.axiosRef.get(
       `${this.baseUrl}/events/this-week`,
-      { params }
+      { params },
     );
     return response.data;
   }
@@ -84,7 +112,7 @@ export class SearchService {
     try {
       const response: AxiosResponse = await this.httpService.axiosRef.get(
         `${this.baseUrl}/events-by-category`,
-        { params }
+        { params },
       );
       return response.data;
     } catch (error) {

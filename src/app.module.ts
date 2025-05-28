@@ -17,6 +17,7 @@ import { OrderController } from './event/controller/order.controller';
 import { SearchModule } from './search/search.module';
 import { SearchController } from './search/search.controller';
 import { InterestModule } from './interest/interest.module';
+import { SpeechModule } from './speech/speech.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { InterestModule } from './interest/interest.module';
     BookingsModule,
     SearchModule,
     InterestModule,
+    SpeechModule,
   ],
   controllers: [
     AppController,
@@ -55,4 +57,4 @@ import { InterestModule } from './interest/interest.module';
     ClerkClientProvider,
   ],
 })
-export class AppModule { }
+export class AppModule {}
