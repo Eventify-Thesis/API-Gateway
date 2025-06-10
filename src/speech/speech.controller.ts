@@ -12,6 +12,7 @@ import { firstValueFrom } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
 import { AxiosResponse } from 'axios';
 import * as FormData from 'form-data';
+import { ConfigService } from '@nestjs/config';
 
 interface ChatRequest {
   query: string;
@@ -41,7 +42,10 @@ interface ChatResponse {
 
 @Controller('user')
 export class SpeechController {
-  constructor(private readonly httpService: HttpService) {}
+  constructor(
+    private readonly httpService: HttpService,
+    private readonly configService: ConfigService,
+  ) {}
 
   @Post('stt')
   @UseInterceptors(
@@ -70,10 +74,14 @@ export class SpeechController {
           format: 'binary',
           description: 'WAV audio file (16kHz, mono)',
         },
+        language: {
+          type: 'string',
+          description: 'Language code for speech recognition (e.g., en, vi)',
+        },
       },
     },
   })
-  async speechToText(@UploadedFile() file: any) {
+  async speechToText(@UploadedFile() file: any, @Body() body: any) {
     try {
       if (!file) {
         throw new BadRequestException('No file uploaded');
@@ -87,6 +95,9 @@ export class SpeechController {
         `Processing audio file: ${file.originalname} (${file.size} bytes)`,
       );
 
+      // Get language from body, default to 'en'
+      const language = body?.language || 'en';
+
       // Create form data using Node.js form-data package
       const formData = new FormData();
       formData.append('file', file.buffer, {
@@ -94,13 +105,32 @@ export class SpeechController {
         contentType: 'audio/wav',
       });
 
-      // Forward request to search service
+      // Convert language code to appropriate format for Google Speech-to-Text
+      let languageCode: string;
+      switch (language) {
+        case 'vi':
+          languageCode = 'vi-VN';
+          break;
+        case 'en':
+          languageCode = 'en-US';
+          break;
+        default:
+          languageCode = 'en-US';
+      }
+
+      // Forward request to search service with language parameter
       const response = await firstValueFrom(
-        this.httpService.post('http://localhost:8003/api/stt', formData, {
-          headers: {
-            ...formData.getHeaders(),
+        this.httpService.post(
+          `${this.configService.get<string>(
+            'SEARCH_SERVICE_BASE_URL',
+          )}/api/stt?language_code=${languageCode}`,
+          formData,
+          {
+            headers: {
+              ...formData.getHeaders(),
+            },
           },
-        }),
+        ),
       );
 
       return (response as AxiosResponse).data;
@@ -144,11 +174,17 @@ export class SpeechController {
 
       // Forward request to search service
       const response = await firstValueFrom(
-        this.httpService.post('http://localhost:8003/api/chat', chatRequest, {
-          headers: {
-            'Content-Type': 'application/json',
+        this.httpService.post(
+          `${this.configService.get<string>(
+            'SEARCH_SERVICE_BASE_URL',
+          )}/api/chat`,
+          chatRequest,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
           },
-        }),
+        ),
       );
 
       return (response as AxiosResponse<ChatResponse>).data;

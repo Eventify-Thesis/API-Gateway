@@ -11,7 +11,9 @@ export class SearchService {
     private readonly httpService: HttpService,
     private readonly configService: ConfigService,
   ) {
-    this.baseUrl = this.configService.get<string>('SEARCH_SERVICE_BASE_URL');
+    this.baseUrl = `${this.configService.get<string>(
+      'SEARCH_SERVICE_BASE_URL',
+    )}/api/search`;
   }
 
   async searchSemanticEvents(
