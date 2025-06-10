@@ -6,7 +6,7 @@ import { User } from '@clerk/backend';
 
 @Injectable()
 export class EventServiceProxy {
-  constructor(@Inject('EVENT_SERVICE') private readonly client: ClientProxy) { }
+  constructor(@Inject('EVENT_SERVICE') private readonly client: ClientProxy) {}
 
   async getEventDetails(id: number) {
     return await this.client.send('getEventDetails', id).toPromise();
@@ -38,7 +38,9 @@ export class EventServiceProxy {
 
   async getUserOrders(userId: string, query: GetOrdersQuery) {
     try {
-      return await this.client.send('getUserOrders', { userId, query }).toPromise();
+      return await this.client
+        .send('getUserOrders', { userId, query })
+        .toPromise();
     } catch (error) {
       console.log(error);
     }
@@ -46,7 +48,9 @@ export class EventServiceProxy {
 
   async getOrderDetail(orderPublicId: string) {
     try {
-      return await this.client.send('getOrderDetail', orderPublicId).toPromise();
+      return await this.client
+        .send('getOrderDetail', orderPublicId)
+        .toPromise();
     } catch (error) {
       console.log(error);
     }

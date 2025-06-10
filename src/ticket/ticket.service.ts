@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import {
   ClientOptions,
   ClientProxy,
@@ -12,17 +13,17 @@ import { QuestionAnswerDto } from 'src/bookings/dto/question-answer.dto';
 export class TicketServiceProxy {
   private client: ClientProxy;
 
-  constructor() {
+  constructor(private readonly configService: ConfigService) {
     // create initial client
     this.initClient();
   }
 
   private initClient() {
     const options: ClientOptions = {
-      transport: Transport.TCP,
+      transport: Transport.REDIS,
       options: {
-        host: '127.0.0.1',
-        port: 8082,
+        host: this.configService.get('REDIS.HOST') || 'localhost',
+        port: this.configService.get('REDIS.PORT') || 6379,
       },
     };
     this.client = ClientProxyFactory.create(options);
@@ -45,46 +46,43 @@ export class TicketServiceProxy {
 
   async getShowSeatAvailability(showId: number) {
     return await this.tryClient(() =>
-      this.client.send('getShowSeatAvailability', showId).toPromise()
+      this.client.send('getShowSeatAvailability', showId).toPromise(),
     );
   }
 
   async submitTicketInfo(dto: any) {
     return await this.tryClient(() =>
-      this.client.send('submitTicketInfo', dto).toPromise()
+      this.client.send('submitTicketInfo', dto).toPromise(),
     );
   }
 
   async getBookingStatus(showId: number, bookingCode: string) {
     return await this.tryClient(() =>
-      this.client.send('getBookingStatus', { showId, bookingCode })
-        .toPromise()
+      this.client.send('getBookingStatus', { showId, bookingCode }).toPromise(),
     );
   }
 
   async cancelBooking(showId: number, bookingCode: string) {
     return await this.tryClient(() =>
-      this.client.send('cancelBooking', { showId, bookingCode })
-        .toPromise()
+      this.client.send('cancelBooking', { showId, bookingCode }).toPromise(),
     );
   }
 
   async getFormAnswers(showId: number, bookingId: string) {
     return await this.tryClient(() =>
-      this.client.send('getFormAnswers', { showId, bookingId })
-        .toPromise()
+      this.client.send('getFormAnswers', { showId, bookingId }).toPromise(),
     );
   }
 
   async updateAnswers(questionAnswers: QuestionAnswerDto) {
     return await this.tryClient(() =>
-      this.client.send('updateAnswers', questionAnswers).toPromise()
+      this.client.send('updateAnswers', questionAnswers).toPromise(),
     );
   }
 
   async createPaymentIntent(data: CreatePaymentIntentDto) {
     return await this.tryClient(() =>
-      this.client.send('createPaymentIntent', data.orderId).toPromise()
+      this.client.send('createPaymentIntent', data.orderId).toPromise(),
     );
   }
 
@@ -96,7 +94,7 @@ export class TicketServiceProxy {
     paidAt: Date;
   }) {
     return await this.tryClient(() =>
-      this.client.send('handleSuccessfulPayment', payload).toPromise()
+      this.client.send('handleSuccessfulPayment', payload).toPromise(),
     );
   }
 
@@ -106,19 +104,23 @@ export class TicketServiceProxy {
     errorMessage?: string;
   }) {
     return await this.tryClient(() =>
-      this.client.send('handleFailedPayment', payload).toPromise()
+      this.client.send('handleFailedPayment', payload).toPromise(),
     );
   }
 
   async getAvailableVouchers(eventId: number, showId: number) {
     return await this.tryClient(() =>
-      this.client.send('get_available_vouchers', { eventId, showId }).toPromise()
+      this.client
+        .send('get_available_vouchers', { eventId, showId })
+        .toPromise(),
     );
   }
 
   async applyVoucher(showId: number, bookingCode: string, voucherCode: string) {
     return await this.tryClient(() =>
-      this.client.send('apply_voucher', { showId, bookingCode, voucherCode }).toPromise()
+      this.client
+        .send('apply_voucher', { showId, bookingCode, voucherCode })
+        .toPromise(),
     );
   }
 }

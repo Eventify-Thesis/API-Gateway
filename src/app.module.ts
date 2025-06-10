@@ -27,10 +27,18 @@ import { SpeechModule } from './speech/speech.module';
     ClientsModule.register([
       {
         name: 'EVENT_SERVICE',
-        transport: Transport.TCP,
+        transport: Transport.REDIS,
         options: {
-          host: '127.0.0.1',
-          port: 8081,
+          host: process.env.REDIS_HOST || 'localhost',
+          port: parseInt(process.env.REDIS_PORT, 10) || 6379,
+        },
+      },
+      {
+        name: 'TICKET_SERVICE',
+        transport: Transport.REDIS,
+        options: {
+          host: process.env.REDIS_HOST || 'localhost',
+          port: parseInt(process.env.REDIS_PORT, 10) || 6379,
         },
       },
     ]),

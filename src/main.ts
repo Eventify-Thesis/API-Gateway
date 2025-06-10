@@ -4,7 +4,6 @@ import { ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
 import { ConfigService } from '@nestjs/config';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
-import { Transport, MicroserviceOptions } from '@nestjs/microservices';
 import { AppExceptionFilter } from './common/exceptions/app-exception.filter';
 import { rawBodyMiddleware } from './middleware/raw-body.middleware';
 
@@ -36,12 +35,5 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   await app.listen(3000);
-
-  const microservice = app.connectMicroservice({
-    transport: Transport.TCP,
-    options: { port: 8079 },
-  });
-
-  await app.startAllMicroservices();
 }
 bootstrap();
