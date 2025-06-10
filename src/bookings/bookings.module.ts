@@ -12,8 +12,8 @@ import { PaymentController } from './payment.controller';
         name: 'TICKET_SERVICE',
         transport: Transport.REDIS,
         options: {
-          host: '127.0.0.1',
-          port: 6379,
+          host: process.env.REDIS_HOST || 'localhost',
+          port: parseInt(process.env.REDIS_PORT, 10) || 6379,
         },
       },
     ]),
@@ -21,4 +21,4 @@ import { PaymentController } from './payment.controller';
   controllers: [BookingsController, PaymentController],
   providers: [BookingsService, TicketServiceProxy],
 })
-export class BookingsModule { }
+export class BookingsModule {}
