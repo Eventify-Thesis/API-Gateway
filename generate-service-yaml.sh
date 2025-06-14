@@ -32,7 +32,7 @@ spec:
 EOF
 
 # Read .env file and append environment variables
-if [ -f .env ]; then
+if [ -f .env.prod ]; then
     while IFS='=' read -r key value; do
         # Skip empty lines and comments
         if [[ ! -z "$key" && ! "$key" =~ ^[[:space:]]*# ]]; then
@@ -43,7 +43,7 @@ if [ -f .env ]; then
             echo "        - name: $key" >> service.yaml
             echo "          value: \"$value\"" >> service.yaml
         fi
-    done < .env
+    done < .env.prod
 fi
 
 # Add resource limits
