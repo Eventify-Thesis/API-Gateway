@@ -18,6 +18,7 @@ spec:
     metadata:
       annotations:
         run.googleapis.com/execution-environment: gen2
+        run.googleapis.com/vpc-access-connector: eventify-connector
     spec:
       containerConcurrency: 80
       timeoutSeconds: 300

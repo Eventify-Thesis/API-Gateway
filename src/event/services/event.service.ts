@@ -1,21 +1,27 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import RequestWithUser from 'src/auth/role/requestWithUser.interface';
 import { GetOrdersQuery } from '../dto/get-orders.dto';
-import { User } from '@clerk/backend';
 
 @Injectable()
 export class EventServiceProxy {
   constructor(@Inject('EVENT_SERVICE') private readonly client: ClientProxy) {}
 
   async getEventDetails(id: number) {
-    return await this.client.send('getEventDetails', id).toPromise();
+    try {
+      return await this.client.send('getEventDetails', id).toPromise();
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async getEventShowDetails(id: number, showId: number) {
-    return await this.client
-      .send('getEventShowDetails', { id, showId })
-      .toPromise();
+    try {
+      return await this.client
+        .send('getEventShowDetails', { id, showId })
+        .toPromise();
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async getEventShowSeatingPlan(id: number, seatingPlanId: number) {
