@@ -9,4 +9,5 @@ export default () => ({
     HOST: process.env.REDIS_HOST || 'localhost',
     PORT: parseInt(process.env.REDIS_PORT, 10) || 6379,
   },
+  CLERK_CUSTOM_TEMPLATE: process.env.CLERK_CUSTOM_TEMPLATE || 'test',
 });
