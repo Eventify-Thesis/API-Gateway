@@ -123,4 +123,10 @@ export class TicketServiceProxy {
         .toPromise(),
     );
   }
+
+  async completeFreeOrder(orderId: number) {
+    return await this.tryClient(() =>
+      this.client.send('completeFreeOrder', { orderId }).toPromise(),
+    );
+  }
 }

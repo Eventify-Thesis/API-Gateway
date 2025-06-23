@@ -7,8 +7,7 @@ import Stripe from 'stripe';
 
 @Injectable()
 export class BookingsService {
-
-  constructor(private readonly ticketService: TicketServiceProxy) { }
+  constructor(private readonly ticketService: TicketServiceProxy) {}
 
   async submitTicketInfo(dto: SubmitTicketInfoDto) {
     console.log('dto', dto);
@@ -43,7 +42,7 @@ export class BookingsService {
       amount: paymentIntent.amount,
       status: paymentIntent.status,
       paidAt: new Date(),
-    })
+    });
   }
 
   async handleFailedPayment(paymentIntent: Stripe.PaymentIntent) {
@@ -60,6 +59,14 @@ export class BookingsService {
   }
 
   async applyVoucher(showId: number, bookingCode: string, voucherCode: string) {
-    return await this.ticketService.applyVoucher(showId, bookingCode, voucherCode);
+    return await this.ticketService.applyVoucher(
+      showId,
+      bookingCode,
+      voucherCode,
+    );
+  }
+
+  async completeFreeOrder(orderId: number) {
+    return await this.ticketService.completeFreeOrder(orderId);
   }
 }

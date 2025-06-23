@@ -1,4 +1,17 @@
-import { Controller, Get, Post, Body, Query, Req, UsePipes, ValidationPipe, UseGuards, Delete, Put, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Query,
+  Req,
+  UsePipes,
+  ValidationPipe,
+  UseGuards,
+  Delete,
+  Put,
+  Param,
+} from '@nestjs/common';
 import { BookingsService } from './bookings.service';
 import { SubmitTicketInfoDto } from './dto/submit-ticket-info.dto';
 import RequestWithUser from 'src/auth/role/requestWithUser.interface';
@@ -11,20 +24,18 @@ import { RawBodyRequest } from '@nestjs/common/interfaces';
 @Controller('bookings')
 @UseGuards(ClerkAuthGuard)
 export class BookingsController {
-
-  constructor(private readonly bookingsService: BookingsService) {
-  }
+  constructor(private readonly bookingsService: BookingsService) {}
 
   @Post('submit-ticket-info')
   @UsePipes(new ValidationPipe({ transform: true }))
   async create(
     @Req() req: RequestWithUser,
-    @Body() submitTicketInfoDto: SubmitTicketInfoDto) {
+    @Body() submitTicketInfoDto: SubmitTicketInfoDto,
+  ) {
     const answer = await this.bookingsService.submitTicketInfo({
       ...submitTicketInfoDto,
       userId: req.user.id,
-    }
-    );
+    });
     return answer;
   }
 
@@ -54,12 +65,12 @@ export class BookingsController {
   updateAnswers(
     @Query('showId') showId: number,
     @Query('bookingCode') bookingCode: string,
-    @Body() questionAnswers: QuestionAnswerDto) {
-    console.log('get answers', questionAnswers)
+    @Body() questionAnswers: QuestionAnswerDto,
+  ) {
     return this.bookingsService.updateAnswers({
       ...questionAnswers,
       showId,
-      bookingCode
+      bookingCode,
     });
   }
 
@@ -74,7 +85,10 @@ export class BookingsController {
   }
 
   @Get('vouchers/:eventId/:showId')
-  async getAvailableVouchers(@Param('eventId') eventId: number, @Param('showId') showId: number) {
+  async getAvailableVouchers(
+    @Param('eventId') eventId: number,
+    @Param('showId') showId: number,
+  ) {
     return this.bookingsService.getAvailableVouchers(eventId, showId);
   }
 
@@ -91,5 +105,11 @@ export class BookingsController {
   createPaymentIntent(@Body() body: any) {
     console.log('create payment intent', body);
     return this.bookingsService.createPaymentIntent(body);
+  }
+
+  @Post('complete-free-order')
+  async completeFreeOrder(@Body() body: { orderId: number }) {
+    console.log('complete free order', body);
+    return this.bookingsService.completeFreeOrder(body.orderId);
   }
 }
