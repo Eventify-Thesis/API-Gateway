@@ -12,12 +12,18 @@ import { SeatController } from './seat/seat.controller';
 import { SSEEventsController } from './seat/sse.events.controller';
 import { EventServiceProxy } from './event/services/event.service';
 import { EventController } from './event/controller/event.controller';
+import { CommentServiceProxy } from './event/services/comment.service';
+import { CommentController } from './event/controller/comment.controller';
+import { IssueReportServiceProxy } from './event/services/issue-report.service';
+import { IssueReportController } from './event/controller/issue-report.controller';
 import { BookingsModule } from './bookings/bookings.module';
 import { OrderController } from './event/controller/order.controller';
 import { SearchModule } from './search/search.module';
 import { SearchController } from './search/search.controller';
 import { InterestModule } from './interest/interest.module';
 import { SpeechModule } from './speech/speech.module';
+import { MediaServiceProxy } from './media/services/media.service';
+import { MediaController } from './media/controllers/media.controller';
 
 @Module({
   imports: [
@@ -57,11 +63,17 @@ import { SpeechModule } from './speech/speech.module';
     EventController,
     OrderController,
     SearchController,
+    CommentController,
+    IssueReportController,
+    MediaController,
   ],
   providers: [
     AppService,
     EventServiceProxy,
     PlannerEventServiceProxy,
+    CommentServiceProxy,
+    IssueReportServiceProxy,
+    MediaServiceProxy,
     ClerkClientProvider,
   ],
 })

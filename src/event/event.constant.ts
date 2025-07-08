@@ -56,4 +56,59 @@ export const MESSAGE = {
     message: 'Question not found',
     httpStatus: HttpStatus.NOT_FOUND,
   },
+
+  COMMENT_NOT_FOUND: {
+    error: 'COMMENT_NOT_FOUND',
+    message: 'Comment not found',
+    httpStatus: HttpStatus.NOT_FOUND,
+  },
+
+  COMMENT_UNAUTHORIZED: {
+    error: 'COMMENT_UNAUTHORIZED',
+    message: 'You are not authorized to perform this action on this comment',
+    httpStatus: HttpStatus.FORBIDDEN,
+  },
+
+  COMMENT_VALIDATION_ERROR: {
+    error: 'COMMENT_VALIDATION_ERROR',
+    message: 'Comment validation failed',
+    httpStatus: HttpStatus.BAD_REQUEST,
+  },
+
+  ISSUE_REPORT_NOT_FOUND: {
+    error: 'ISSUE_REPORT_NOT_FOUND',
+    message: 'Issue report not found',
+    httpStatus: HttpStatus.NOT_FOUND,
+  },
+
+  ISSUE_REPORT_UNAUTHORIZED: {
+    error: 'ISSUE_REPORT_UNAUTHORIZED',
+    message:
+      'You are not authorized to perform this action on this issue report',
+    httpStatus: HttpStatus.FORBIDDEN,
+  },
+
+  ISSUE_REPORT_VALIDATION_ERROR: {
+    error: 'ISSUE_REPORT_VALIDATION_ERROR',
+    message: 'Issue report validation failed',
+    httpStatus: HttpStatus.BAD_REQUEST,
+  },
+
+  ISSUE_REPORT_CREATE_ERROR: {
+    error: 'ISSUE_REPORT_CREATE_ERROR',
+    message: 'Failed to create issue report',
+    httpStatus: HttpStatus.INTERNAL_SERVER_ERROR,
+  },
+
+  ISSUE_REPORT_UPDATE_ERROR: {
+    error: 'ISSUE_REPORT_UPDATE_ERROR',
+    message: 'Failed to update issue report',
+    httpStatus: HttpStatus.INTERNAL_SERVER_ERROR,
+  },
+
+  ISSUE_REPORT_DELETE_ERROR: {
+    error: 'ISSUE_REPORT_DELETE_ERROR',
+    message: 'Failed to delete issue report',
+    httpStatus: HttpStatus.INTERNAL_SERVER_ERROR,
+  },
 };
