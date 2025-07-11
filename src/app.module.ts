@@ -22,8 +22,7 @@ import { SearchModule } from './search/search.module';
 import { SearchController } from './search/search.controller';
 import { InterestModule } from './interest/interest.module';
 import { SpeechModule } from './speech/speech.module';
-import { MediaServiceProxy } from './media/services/media.service';
-import { MediaController } from './media/controllers/media.controller';
+import { MediaModule } from './media/media.module';
 
 @Module({
   imports: [
@@ -54,6 +53,7 @@ import { MediaController } from './media/controllers/media.controller';
     SearchModule,
     InterestModule,
     SpeechModule,
+    MediaModule,
   ],
   controllers: [
     AppController,
@@ -65,7 +65,6 @@ import { MediaController } from './media/controllers/media.controller';
     SearchController,
     CommentController,
     IssueReportController,
-    MediaController,
   ],
   providers: [
     AppService,
@@ -73,7 +72,6 @@ import { MediaController } from './media/controllers/media.controller';
     PlannerEventServiceProxy,
     CommentServiceProxy,
     IssueReportServiceProxy,
-    MediaServiceProxy,
     ClerkClientProvider,
   ],
 })
