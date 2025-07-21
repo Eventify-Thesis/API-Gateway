@@ -1,7 +1,15 @@
-import { Controller, Post, Req, Headers } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Req,
+  Headers,
+  Body,
+  UseGuards,
+} from '@nestjs/common';
 import { BookingsService } from './bookings.service';
 import { RawBodyRequest } from '@nestjs/common/interfaces';
 import Stripe from 'stripe';
+import { ClerkAuthGuard } from 'src/auth/clerk-auth.guard';
 
 @Controller('bookings')
 export class PaymentController {
@@ -9,6 +17,38 @@ export class PaymentController {
 
   constructor(private readonly bookingsService: BookingsService) {
     this.stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+  }
+
+  @Post('initiate-payment')
+  @UseGuards(ClerkAuthGuard)
+  async initiatePayment(
+    @Body()
+    body: {
+      paymentIntentId: string;
+      paymentProvider: string;
+      amount: number;
+      currency: string;
+      orderId?: string;
+    },
+  ) {
+    console.log('Initiating payment:', body);
+    return this.bookingsService.initiateVietnamesePayment(body);
+  }
+
+  @Post('complete-vietnamese-payment')
+  @UseGuards(ClerkAuthGuard)
+  async completeVietnamesePayment(
+    @Body()
+    body: {
+      orderId: number;
+      paymentIntentId: string;
+      paymentProvider: string;
+      amount: number;
+      transactionId?: string;
+    },
+  ) {
+    console.log('Completing Vietnamese payment:', body);
+    return this.bookingsService.completeVietnamesePayment(body);
   }
 
   @Post('webhook')
@@ -36,7 +76,7 @@ export class PaymentController {
         event = this.stripe.webhooks.constructEvent(
           request.rawBody,
           signature,
-          process.env.STRIPE_WEBHOOK_SECRET
+          process.env.STRIPE_WEBHOOK_SECRET,
         );
       } catch (err) {
         console.error('Webhook signature verification failed:', err.message);
@@ -72,7 +112,10 @@ export class PaymentController {
           const failedPaymentIntent = event.data.object as Stripe.PaymentIntent;
           console.log('Processing failed payment:', failedPaymentIntent.id);
           await this.bookingsService.handleFailedPayment(failedPaymentIntent);
-          console.log('Successfully processed failed payment:', failedPaymentIntent.id);
+          console.log(
+            'Successfully processed failed payment:',
+            failedPaymentIntent.id,
+          );
           break;
 
         default:

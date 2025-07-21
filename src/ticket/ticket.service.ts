@@ -129,4 +129,28 @@ export class TicketServiceProxy {
       this.client.send('completeFreeOrder', { orderId }).toPromise(),
     );
   }
+
+  async initiateVietnamesePayment(data: {
+    paymentIntentId: string;
+    paymentProvider: string;
+    amount: number;
+    currency: string;
+    orderId?: string;
+  }) {
+    return await this.tryClient(() =>
+      this.client.send('initiateVietnamesePayment', data).toPromise(),
+    );
+  }
+
+  async completeVietnamesePayment(data: {
+    orderId: number;
+    paymentIntentId: string;
+    paymentProvider: string;
+    amount: number;
+    transactionId?: string;
+  }) {
+    return await this.tryClient(() =>
+      this.client.send('handleVietnamesePaymentSuccess', data).toPromise(),
+    );
+  }
 }

@@ -69,4 +69,24 @@ export class BookingsService {
   async completeFreeOrder(orderId: number) {
     return await this.ticketService.completeFreeOrder(orderId);
   }
+
+  async initiateVietnamesePayment(data: {
+    paymentIntentId: string;
+    paymentProvider: string;
+    amount: number;
+    currency: string;
+    orderId?: string;
+  }) {
+    return await this.ticketService.initiateVietnamesePayment(data);
+  }
+
+  async completeVietnamesePayment(data: {
+    orderId: number;
+    paymentIntentId: string;
+    paymentProvider: string;
+    amount: number;
+    transactionId?: string;
+  }) {
+    return await this.ticketService.completeVietnamesePayment(data);
+  }
 }
