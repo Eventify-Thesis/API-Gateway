@@ -9,11 +9,11 @@ import { rawBodyMiddleware } from './middleware/raw-body.middleware';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    rawBody: true,
-    bodyParser: true,
+    rawBody: false, // Disable default body parser
+    bodyParser: false,
   });
 
-  // Apply raw body middleware before other middleware
+  // Apply custom raw body middleware that handles both webhooks and regular requests
   app.use(rawBodyMiddleware());
 
   app.useGlobalPipes(
