@@ -36,7 +36,6 @@ export class PaymentController {
   }
 
   @Post('complete-vietnamese-payment')
-  @UseGuards(ClerkAuthGuard)
   async completeVietnamesePayment(
     @Body()
     body: {

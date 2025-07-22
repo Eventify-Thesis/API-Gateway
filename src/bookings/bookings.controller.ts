@@ -22,7 +22,7 @@ import { Stripe } from 'stripe';
 import { RawBodyRequest } from '@nestjs/common/interfaces';
 
 @Controller('bookings')
-@UseGuards(ClerkAuthGuard)
+// @UseGuards(ClerkAuthGuard)
 export class BookingsController {
   constructor(private readonly bookingsService: BookingsService) {}
 
@@ -91,6 +91,7 @@ export class BookingsController {
   ) {
     return this.bookingsService.getAvailableVouchers(eventId, showId);
   }
+
 
   @Post('vouchers/:showId/:bookingCode/apply')
   async applyVoucher(

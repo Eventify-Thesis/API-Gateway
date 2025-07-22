@@ -25,4 +25,9 @@ export class OrderController {
   getDetail(@Param('orderPublicId') orderPublicId: string) {
     return this.eventService.getOrderDetail(orderPublicId);
   }
+
+  @Get('detail/:orderId')
+  getDetailBy(@Param('orderId') orderPublicId: string) {
+    return this.eventService.getOrderDetailById(orderPublicId);
+  }
 }

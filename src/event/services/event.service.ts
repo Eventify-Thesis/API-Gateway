@@ -61,4 +61,14 @@ export class EventServiceProxy {
       console.log(error);
     }
   }
+
+  async getOrderDetailById(orderId: string) {
+    try {
+      return await this.client
+        .send('getOrderDetailById', orderId)
+        .toPromise();
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
